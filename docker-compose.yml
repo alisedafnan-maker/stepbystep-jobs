@@ -1,0 +1,30 @@
+
+version: '3.8'
+services:
+  web:
+    build: ./web
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
+    volumes:
+      - ./web:/var/www/html:cached
+      - ./uploads:/var/www/html/uploads
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=example
+      - DB_NAME=stepbystep
+
+  db:
+    image: mariadb:10.11
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d:ro
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+  
